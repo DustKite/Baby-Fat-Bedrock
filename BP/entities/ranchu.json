@@ -1,0 +1,4286 @@
+{
+  "format_version": "1.21.10",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "babyfat:ranchu",
+      "spawn_category": "water_ambient",
+      "is_spawnable": true,
+      "is_summonable": true,
+      "is_experimental": false
+    },
+    "components": {
+      "minecraft:is_hidden_when_invisible": {},
+      "minecraft:behavior.swim_idle": {
+        "priority": 6,
+        "idle_time": 5,
+        "success_rate": 0.1
+      },
+      "minecraft:behavior.random_swim": {
+        "priority": 4,
+        "speed_multiplier": 1,
+        "xz_dist": 16,
+        "y_dist": 4,
+        "interval": 0
+      },
+      "minecraft:behavior.swim_wander": {
+        "priority": 5,
+        "interval": 0.1,
+        "look_ahead": 2,
+        "speed_multiplier": 1,
+        "wander_time": 5
+      },
+      "minecraft:type_family": {
+        "family": [
+          "aquatic",
+          "ranchu",
+          "fish"
+        ]
+      },
+      "minecraft:collision_box": {
+        "height": 0.4,
+        "width": 0.4
+      },
+      "minecraft:behavior.avoid_mob_type": {
+        "priority": 1,
+        "entity_types": [
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "axolotl"
+            },
+            "max_dist": 6,
+            "walk_speed_multiplier": 1.5,
+            "sprint_speed_multiplier": 2.0
+          }
+        ]
+      },
+      "minecraft:loot": {
+        "table": "loot_tables/entities/ranchu.json"
+      },
+      "minecraft:health": {
+        "value": 10,
+        "max": 10
+      },
+      "minecraft:pushable": {
+        "is_pushable": true,
+        "is_pushable_by_piston": true
+      },
+      "minecraft:hurt_on_condition": {
+        "damage_conditions": [
+          {
+            "filters": {
+              "test": "in_lava",
+              "subject": "self",
+              "operator": "==",
+              "value": true
+            },
+            "cause": "lava",
+            "damage_per_tick": 4
+          }
+        ]
+      },
+      "minecraft:breathable": {
+        "total_supply": 15,
+        "suffocate_time": 0,
+        "breathes_air": false,
+        "breathes_water": true
+      },
+      "minecraft:movement": {
+        "value": 0.15
+      },
+      "minecraft:underwater_movement": {
+        "value": 0.2
+      },
+      "minecraft:movement.sway": {
+        "sway_amplitude": 0
+      },
+      "minecraft:behavior.tempt": {
+        "items": [
+          "babyfat:water_lettuce"
+        ],
+        "priority": 3,
+        "within_radius": 6,
+        "can_tempt_vertically": true,
+        "speed_multiplier": 1.25
+      },
+      "minecraft:navigation.generic": {
+        "is_amphibious": false,
+        "can_path_over_water": false,
+        "can_swim": true,
+        "can_walk": false,
+        "can_breach": false,
+        "can_sink": false
+      },
+      "minecraft:physics": {
+        "has_gravity": true
+      },
+      "minecraft:despawn": {
+        "filters": [
+          {
+            "all_of": [
+              {
+                "test": "is_persistent",
+                "value": false
+              },
+              {
+                "operator": ">",
+                "test": "distance_to_nearest_player",
+                "value": 54
+              }
+            ]
+          }
+        ]
+      },
+      "minecraft:conditional_bandwidth_optimization": {},
+      "minecraft:nameable": {}
+    },
+    "component_groups": {
+      "can_breed_next": {
+        "minecraft:entity_sensor": {
+          "subsensors": [
+            {
+              "event": "babyfat:can_breed_now",
+              "cooldown": 0.5,
+              "range": [
+                5.0,
+                5.0
+              ],
+              "minimum_count": 0,
+              "maximum_count": 6,
+              "event_filters": {
+                "test": "is_family",
+                "subject": "other",
+                "value": "ranchu"
+              }
+            },
+            {
+              "event": "babyfat:can_not_breed_now",
+              "cooldown": 0.5,
+              "range": [
+                5.0,
+                5.0
+              ],
+              "minimum_count": 7,
+              "maximum_count": 100,
+              "event_filters": {
+                "test": "is_family",
+                "subject": "other",
+                "value": "ranchu"
+              }
+            }
+          ]
+        }
+      },
+      "can_breed_now": {
+        "minecraft:breedable": {
+          "require_tame": false,
+          "breed_items": [
+            "babyfat:water_lettuce"
+          ],
+          "breed_cooldown": 60,
+          "environment_requirements": [
+            {
+              "blocks": [
+                "babyfat:water_lettuce"
+              ],
+              "radius": 5
+            }
+          ],
+          "breeds_with": {
+            "mate_type": "babyfat:ranchu",
+            "baby_type": "babyfat:ranchu",
+            "breed_event": {
+              "event": "minecraft:entity_born",
+              "target": "baby"
+            }
+          }
+        },
+        "minecraft:behavior.breed": {
+          "priority": 2
+        }
+      },
+      "ranchu_baby": {
+        "minecraft:ageable": {
+          "duration": 1200,
+          "feed_items": "babyfat:water_lettuce",
+          "grow_up": {
+            "event": "babyfat:ageable_grow_up",
+            "target": "self"
+          }
+        },
+        "minecraft:is_baby": {},
+        "minecraft:scale": {
+          "value": 0.5
+        }
+      },
+      "ranchu_adult": {
+        "minecraft:scale": {
+          "value": 1
+        },
+        "minecraft:experience_reward": {
+          "on_bred": "Math.Random(1,7)",
+          "on_death": "query.last_hit_by_player ? Math.Random(1,3) : 0"
+        },
+        "minecraft:loot": {
+          "table": "loot_tables/entities/ranchu.json"
+        },
+        "minecraft:environment_sensor": {
+          "triggers": [
+            {
+              "filters": {
+                "all_of": [
+                  {
+                    "test": "hourly_clock_time",
+                    "operator": ">=",
+                    "value": 22200
+                  },
+                  {
+                    "test": "hourly_clock_time",
+                    "operator": "<",
+                    "value": 24000
+                  }
+                ]
+              },
+              "event": "babyfat:can_breed_time"
+            },
+            {
+              "filters": {
+                "all_of": [
+                  {
+                    "test": "hourly_clock_time",
+                    "operator": ">=",
+                    "value": 0
+                  },
+                  {
+                    "test": "hourly_clock_time",
+                    "operator": "<",
+                    "value": 22200
+                  }
+                ]
+              },
+              "event": "babyfat:can_not_breed_time"
+            }
+          ]
+        }
+      },
+      "ranchu_1": {
+        "minecraft:mark_variant": {
+          "value": 1
+        }
+      },
+      "ranchu_2": {
+        "minecraft:mark_variant": {
+          "value": 2
+        }
+      },
+      "ranchu_3": {
+        "minecraft:mark_variant": {
+          "value": 3
+        }
+      },
+      "ranchu_4": {
+        "minecraft:mark_variant": {
+          "value": 4
+        }
+      },
+      "ranchu_5": {
+        "minecraft:mark_variant": {
+          "value": 5
+        }
+      },
+      "ranchu_6": {
+        "minecraft:mark_variant": {
+          "value": 6
+        }
+      },
+      "ranchu_7": {
+        "minecraft:mark_variant": {
+          "value": 7
+        }
+      },
+      "ranchu_8": {
+        "minecraft:mark_variant": {
+          "value": 8
+        }
+      },
+      "ranchu_9": {
+        "minecraft:mark_variant": {
+          "value": 9
+        }
+      },
+      "ranchu_10": {
+        "minecraft:mark_variant": {
+          "value": 10
+        }
+      },
+      "ranchu_11": {
+        "minecraft:mark_variant": {
+          "value": 11
+        }
+      },
+      "ranchu_12": {
+        "minecraft:mark_variant": {
+          "value": 12
+        }
+      },
+      "ranchu_13": {
+        "minecraft:mark_variant": {
+          "value": 13
+        }
+      },
+      "ranchu_14": {
+        "minecraft:mark_variant": {
+          "value": 14
+        }
+      },
+      "ranchu_15": {
+        "minecraft:mark_variant": {
+          "value": 15
+        }
+      },
+      "ranchu_16": {
+        "minecraft:mark_variant": {
+          "value": 16
+        }
+      },
+      "ranchu_17": {
+        "minecraft:mark_variant": {
+          "value": 17
+        }
+      },
+      "ranchu_18": {
+        "minecraft:mark_variant": {
+          "value": 18
+        }
+      },
+      "ranchu_19": {
+        "minecraft:mark_variant": {
+          "value": 19
+        }
+      },
+      "ranchu_20": {
+        "minecraft:mark_variant": {
+          "value": 20
+        }
+      },
+      "ranchu_21": {
+        "minecraft:mark_variant": {
+          "value": 21
+        }
+      },
+      "ranchu_22": {
+        "minecraft:mark_variant": {
+          "value": 22
+        }
+      },
+      "ranchu_23": {
+        "minecraft:mark_variant": {
+          "value": 23
+        }
+      },
+      "ranchu_24": {
+        "minecraft:mark_variant": {
+          "value": 24
+        }
+      },
+      "ranchu_25": {
+        "minecraft:mark_variant": {
+          "value": 25
+        }
+      },
+      "ranchu_26": {
+        "minecraft:mark_variant": {
+          "value": 26
+        }
+      },
+      "ranchu_27": {
+        "minecraft:mark_variant": {
+          "value": 27
+        }
+      },
+      "ranchu_28": {
+        "minecraft:mark_variant": {
+          "value": 28
+        }
+      },
+      "ranchu_29": {
+        "minecraft:mark_variant": {
+          "value": 29
+        }
+      },
+      "ranchu_30": {
+        "minecraft:mark_variant": {
+          "value": 30
+        }
+      },
+      "ranchu_31": {
+        "minecraft:mark_variant": {
+          "value": 31
+        }
+      },
+      "ranchu_32": {
+        "minecraft:mark_variant": {
+          "value": 32
+        }
+      },
+      "ranchu_33": {
+        "minecraft:mark_variant": {
+          "value": 33
+        }
+      },
+      "ranchu_34": {
+        "minecraft:mark_variant": {
+          "value": 34
+        }
+      },
+      "ranchu_35": {
+        "minecraft:mark_variant": {
+          "value": 35
+        }
+      },
+      "ranchu_36": {
+        "minecraft:mark_variant": {
+          "value": 36
+        }
+      },
+      "ranchu_37": {
+        "minecraft:mark_variant": {
+          "value": 37
+        }
+      },
+      "ranchu_38": {
+        "minecraft:mark_variant": {
+          "value": 38
+        }
+      },
+      "ranchu_39": {
+        "minecraft:mark_variant": {
+          "value": 39
+        }
+      },
+      "ranchu_40": {
+        "minecraft:mark_variant": {
+          "value": 40
+        }
+      },
+      "ranchu_41": {
+        "minecraft:mark_variant": {
+          "value": 41
+        }
+      },
+      "ranchu_42": {
+        "minecraft:mark_variant": {
+          "value": 42
+        }
+      },
+      "ranchu_43": {
+        "minecraft:mark_variant": {
+          "value": 43
+        }
+      },
+      "ranchu_44": {
+        "minecraft:mark_variant": {
+          "value": 44
+        }
+      },
+      "ranchu_45": {
+        "minecraft:mark_variant": {
+          "value": 45
+        }
+      },
+      "ranchu_46": {
+        "minecraft:mark_variant": {
+          "value": 46
+        }
+      },
+      "ranchu_47": {
+        "minecraft:mark_variant": {
+          "value": 47
+        }
+      },
+      "ranchu_48": {
+        "minecraft:mark_variant": {
+          "value": 48
+        }
+      },
+      "ranchu_49": {
+        "minecraft:mark_variant": {
+          "value": 49
+        }
+      },
+      "ranchu_50": {
+        "minecraft:mark_variant": {
+          "value": 50
+        }
+      },
+      "ranchu_51": {
+        "minecraft:mark_variant": {
+          "value": 51
+        }
+      },
+      "ranchu_52": {
+        "minecraft:mark_variant": {
+          "value": 52
+        }
+      },
+      "ranchu_53": {
+        "minecraft:mark_variant": {
+          "value": 53
+        }
+      },
+      "ranchu_54": {
+        "minecraft:mark_variant": {
+          "value": 54
+        }
+      },
+      "ranchu_55": {
+        "minecraft:mark_variant": {
+          "value": 55
+        }
+      },
+      "ranchu_56": {
+        "minecraft:mark_variant": {
+          "value": 56
+        }
+      },
+      "ranchu_57": {
+        "minecraft:mark_variant": {
+          "value": 57
+        }
+      },
+      "ranchu_58": {
+        "minecraft:mark_variant": {
+          "value": 58
+        }
+      },
+      "ranchu_59": {
+        "minecraft:mark_variant": {
+          "value": 59
+        }
+      },
+      "ranchu_60": {
+        "minecraft:mark_variant": {
+          "value": 60
+        }
+      },
+      "ranchu_61": {
+        "minecraft:mark_variant": {
+          "value": 61
+        }
+      },
+      "ranchu_62": {
+        "minecraft:mark_variant": {
+          "value": 62
+        }
+      },
+      "ranchu_63": {
+        "minecraft:mark_variant": {
+          "value": 63
+        }
+      },
+      "ranchu_64": {
+        "minecraft:mark_variant": {
+          "value": 64
+        }
+      },
+      "ranchu_65": {
+        "minecraft:mark_variant": {
+          "value": 65
+        }
+      },
+      "ranchu_66": {
+        "minecraft:mark_variant": {
+          "value": 66
+        }
+      },
+      "ranchu_67": {
+        "minecraft:mark_variant": {
+          "value": 67
+        }
+      },
+      "ranchu_68": {
+        "minecraft:mark_variant": {
+          "value": 68
+        }
+      },
+      "ranchu_69": {
+        "minecraft:mark_variant": {
+          "value": 69
+        }
+      },
+      "ranchu_70": {
+        "minecraft:mark_variant": {
+          "value": 70
+        }
+      },
+      "ranchu_71": {
+        "minecraft:mark_variant": {
+          "value": 71
+        }
+      },
+      "ranchu_72": {
+        "minecraft:mark_variant": {
+          "value": 72
+        }
+      },
+      "ranchu_73": {
+        "minecraft:mark_variant": {
+          "value": 73
+        }
+      },
+      "ranchu_74": {
+        "minecraft:mark_variant": {
+          "value": 74
+        }
+      },
+      "ranchu_75": {
+        "minecraft:mark_variant": {
+          "value": 75
+        }
+      },
+      "ranchu_76": {
+        "minecraft:mark_variant": {
+          "value": 76
+        }
+      },
+      "ranchu_77": {
+        "minecraft:mark_variant": {
+          "value": 77
+        }
+      },
+      "ranchu_78": {
+        "minecraft:mark_variant": {
+          "value": 78
+        }
+      },
+      "ranchu_79": {
+        "minecraft:mark_variant": {
+          "value": 79
+        }
+      },
+      "ranchu_80": {
+        "minecraft:mark_variant": {
+          "value": 80
+        }
+      },
+      "ranchu_81": {
+        "minecraft:mark_variant": {
+          "value": 81
+        }
+      },
+      "ranchu_82": {
+        "minecraft:mark_variant": {
+          "value": 82
+        }
+      },
+      "ranchu_83": {
+        "minecraft:mark_variant": {
+          "value": 83
+        }
+      },
+      "ranchu_84": {
+        "minecraft:mark_variant": {
+          "value": 84
+        }
+      },
+      "ranchu_85": {
+        "minecraft:mark_variant": {
+          "value": 85
+        }
+      },
+      "ranchu_86": {
+        "minecraft:mark_variant": {
+          "value": 86
+        }
+      },
+      "ranchu_87": {
+        "minecraft:mark_variant": {
+          "value": 87
+        }
+      },
+      "ranchu_88": {
+        "minecraft:mark_variant": {
+          "value": 88
+        }
+      },
+      "ranchu_89": {
+        "minecraft:mark_variant": {
+          "value": 89
+        }
+      },
+      "ranchu_90": {
+        "minecraft:mark_variant": {
+          "value": 90
+        }
+      },
+      "ranchu_91": {
+        "minecraft:mark_variant": {
+          "value": 91
+        }
+      },
+      "ranchu_92": {
+        "minecraft:mark_variant": {
+          "value": 92
+        }
+      },
+      "ranchu_93": {
+        "minecraft:mark_variant": {
+          "value": 93
+        }
+      },
+      "ranchu_94": {
+        "minecraft:mark_variant": {
+          "value": 94
+        }
+      },
+      "ranchu_95": {
+        "minecraft:mark_variant": {
+          "value": 95
+        }
+      },
+      "ranchu_96": {
+        "minecraft:mark_variant": {
+          "value": 96
+        }
+      },
+      "ranchu_97": {
+        "minecraft:mark_variant": {
+          "value": 97
+        }
+      },
+      "ranchu_98": {
+        "minecraft:mark_variant": {
+          "value": 98
+        }
+      },
+      "ranchu_99": {
+        "minecraft:mark_variant": {
+          "value": 99
+        }
+      },
+      "ranchu_100": {
+        "minecraft:mark_variant": {
+          "value": 100
+        }
+      },
+      "ranchu_101": {
+        "minecraft:mark_variant": {
+          "value": 101
+        }
+      },
+      "ranchu_102": {
+        "minecraft:mark_variant": {
+          "value": 102
+        }
+      },
+      "ranchu_103": {
+        "minecraft:mark_variant": {
+          "value": 103
+        }
+      },
+      "ranchu_104": {
+        "minecraft:mark_variant": {
+          "value": 104
+        }
+      },
+      "ranchu_105": {
+        "minecraft:mark_variant": {
+          "value": 105
+        }
+      },
+      "ranchu_106": {
+        "minecraft:mark_variant": {
+          "value": 106
+        }
+      },
+      "ranchu_107": {
+        "minecraft:mark_variant": {
+          "value": 107
+        }
+      },
+      "ranchu_108": {
+        "minecraft:mark_variant": {
+          "value": 108
+        }
+      },
+      "ranchu_109": {
+        "minecraft:mark_variant": {
+          "value": 109
+        }
+      },
+      "ranchu_110": {
+        "minecraft:mark_variant": {
+          "value": 110
+        }
+      },
+      "ranchu_111": {
+        "minecraft:mark_variant": {
+          "value": 111
+        }
+      },
+      "ranchu_112": {
+        "minecraft:mark_variant": {
+          "value": 112
+        }
+      },
+      "ranchu_113": {
+        "minecraft:mark_variant": {
+          "value": 113
+        }
+      },
+      "ranchu_114": {
+        "minecraft:mark_variant": {
+          "value": 114
+        }
+      },
+      "ranchu_115": {
+        "minecraft:mark_variant": {
+          "value": 115
+        }
+      },
+      "ranchu_116": {
+        "minecraft:mark_variant": {
+          "value": 116
+        }
+      },
+      "ranchu_117": {
+        "minecraft:mark_variant": {
+          "value": 117
+        }
+      },
+      "ranchu_118": {
+        "minecraft:mark_variant": {
+          "value": 118
+        }
+      },
+      "ranchu_119": {
+        "minecraft:mark_variant": {
+          "value": 119
+        }
+      },
+      "ranchu_120": {
+        "minecraft:mark_variant": {
+          "value": 120
+        }
+      },
+      "ranchu_121": {
+        "minecraft:mark_variant": {
+          "value": 121
+        }
+      },
+      "ranchu_122": {
+        "minecraft:mark_variant": {
+          "value": 122
+        }
+      },
+      "ranchu_123": {
+        "minecraft:mark_variant": {
+          "value": 123
+        }
+      },
+      "ranchu_124": {
+        "minecraft:mark_variant": {
+          "value": 124
+        }
+      },
+      "ranchu_125": {
+        "minecraft:mark_variant": {
+          "value": 125
+        }
+      },
+      "ranchu_126": {
+        "minecraft:mark_variant": {
+          "value": 126
+        }
+      },
+      "ranchu_127": {
+        "minecraft:mark_variant": {
+          "value": 127
+        }
+      },
+      "ranchu_128": {
+        "minecraft:mark_variant": {
+          "value": 128
+        }
+      },
+      "ranchu_129": {
+        "minecraft:mark_variant": {
+          "value": 129
+        }
+      },
+      "ranchu_130": {
+        "minecraft:mark_variant": {
+          "value": 130
+        }
+      },
+      "ranchu_131": {
+        "minecraft:mark_variant": {
+          "value": 131
+        }
+      },
+      "ranchu_132": {
+        "minecraft:mark_variant": {
+          "value": 132
+        }
+      },
+      "ranchu_133": {
+        "minecraft:mark_variant": {
+          "value": 133
+        }
+      },
+      "ranchu_134": {
+        "minecraft:mark_variant": {
+          "value": 134
+        }
+      },
+      "ranchu_135": {
+        "minecraft:mark_variant": {
+          "value": 135
+        }
+      },
+      "ranchu_136": {
+        "minecraft:mark_variant": {
+          "value": 136
+        }
+      },
+      "ranchu_137": {
+        "minecraft:mark_variant": {
+          "value": 137
+        }
+      },
+      "ranchu_138": {
+        "minecraft:mark_variant": {
+          "value": 138
+        }
+      },
+      "ranchu_139": {
+        "minecraft:mark_variant": {
+          "value": 139
+        }
+      },
+      "ranchu_140": {
+        "minecraft:mark_variant": {
+          "value": 140
+        }
+      },
+      "ranchu_141": {
+        "minecraft:mark_variant": {
+          "value": 141
+        }
+      },
+      "ranchu_142": {
+        "minecraft:mark_variant": {
+          "value": 142
+        }
+      },
+      "ranchu_143": {
+        "minecraft:mark_variant": {
+          "value": 143
+        }
+      },
+      "ranchu_144": {
+        "minecraft:mark_variant": {
+          "value": 144
+        }
+      },
+      "ranchu_145": {
+        "minecraft:mark_variant": {
+          "value": 145
+        }
+      },
+      "ranchu_146": {
+        "minecraft:mark_variant": {
+          "value": 146
+        }
+      },
+      "ranchu_147": {
+        "minecraft:mark_variant": {
+          "value": 147
+        }
+      },
+      "ranchu_148": {
+        "minecraft:mark_variant": {
+          "value": 148
+        }
+      },
+      "ranchu_149": {
+        "minecraft:mark_variant": {
+          "value": 149
+        }
+      },
+      "ranchu_150": {
+        "minecraft:mark_variant": {
+          "value": 150
+        }
+      },
+      "ranchu_151": {
+        "minecraft:mark_variant": {
+          "value": 151
+        }
+      },
+      "ranchu_152": {
+        "minecraft:mark_variant": {
+          "value": 152
+        }
+      },
+      "ranchu_153": {
+        "minecraft:mark_variant": {
+          "value": 153
+        }
+      },
+      "ranchu_154": {
+        "minecraft:mark_variant": {
+          "value": 154
+        }
+      },
+      "ranchu_155": {
+        "minecraft:mark_variant": {
+          "value": 155
+        }
+      },
+      "ranchu_156": {
+        "minecraft:mark_variant": {
+          "value": 156
+        }
+      },
+      "ranchu_157": {
+        "minecraft:mark_variant": {
+          "value": 157
+        }
+      },
+      "ranchu_158": {
+        "minecraft:mark_variant": {
+          "value": 158
+        }
+      },
+      "ranchu_159": {
+        "minecraft:mark_variant": {
+          "value": 159
+        }
+      },
+      "ranchu_160": {
+        "minecraft:mark_variant": {
+          "value": 160
+        }
+      },
+      "ranchu_161": {
+        "minecraft:mark_variant": {
+          "value": 161
+        }
+      },
+      "ranchu_162": {
+        "minecraft:mark_variant": {
+          "value": 162
+        }
+      },
+      "ranchu_163": {
+        "minecraft:mark_variant": {
+          "value": 163
+        }
+      },
+      "ranchu_164": {
+        "minecraft:mark_variant": {
+          "value": 164
+        }
+      },
+      "ranchu_165": {
+        "minecraft:mark_variant": {
+          "value": 165
+        }
+      },
+      "ranchu_166": {
+        "minecraft:mark_variant": {
+          "value": 166
+        }
+      },
+      "ranchu_167": {
+        "minecraft:mark_variant": {
+          "value": 167
+        }
+      },
+      "ranchu_168": {
+        "minecraft:mark_variant": {
+          "value": 168
+        }
+      },
+      "ranchu_169": {
+        "minecraft:mark_variant": {
+          "value": 169
+        }
+      },
+      "ranchu_170": {
+        "minecraft:mark_variant": {
+          "value": 170
+        }
+      },
+      "ranchu_171": {
+        "minecraft:mark_variant": {
+          "value": 171
+        }
+      },
+      "ranchu_172": {
+        "minecraft:mark_variant": {
+          "value": 172
+        }
+      },
+      "ranchu_173": {
+        "minecraft:mark_variant": {
+          "value": 173
+        }
+      },
+      "ranchu_174": {
+        "minecraft:mark_variant": {
+          "value": 174
+        }
+      },
+      "ranchu_175": {
+        "minecraft:mark_variant": {
+          "value": 175
+        }
+      },
+      "ranchu_176": {
+        "minecraft:mark_variant": {
+          "value": 176
+        }
+      },
+      "ranchu_177": {
+        "minecraft:mark_variant": {
+          "value": 177
+        }
+      },
+      "ranchu_178": {
+        "minecraft:mark_variant": {
+          "value": 178
+        }
+      },
+      "ranchu_179": {
+        "minecraft:mark_variant": {
+          "value": 179
+        }
+      },
+      "ranchu_180": {
+        "minecraft:mark_variant": {
+          "value": 180
+        }
+      },
+      "ranchu_181": {
+        "minecraft:mark_variant": {
+          "value": 181
+        }
+      },
+      "ranchu_182": {
+        "minecraft:mark_variant": {
+          "value": 182
+        }
+      },
+      "ranchu_183": {
+        "minecraft:mark_variant": {
+          "value": 183
+        }
+      },
+      "ranchu_184": {
+        "minecraft:mark_variant": {
+          "value": 184
+        }
+      },
+      "ranchu_185": {
+        "minecraft:mark_variant": {
+          "value": 185
+        }
+      },
+      "ranchu_186": {
+        "minecraft:mark_variant": {
+          "value": 186
+        }
+      },
+      "ranchu_187": {
+        "minecraft:mark_variant": {
+          "value": 187
+        }
+      },
+      "ranchu_188": {
+        "minecraft:mark_variant": {
+          "value": 188
+        }
+      },
+      "ranchu_189": {
+        "minecraft:mark_variant": {
+          "value": 189
+        }
+      },
+      "ranchu_190": {
+        "minecraft:mark_variant": {
+          "value": 190
+        }
+      },
+      "ranchu_191": {
+        "minecraft:mark_variant": {
+          "value": 191
+        }
+      },
+      "ranchu_192": {
+        "minecraft:mark_variant": {
+          "value": 192
+        }
+      },
+      "ranchu_193": {
+        "minecraft:mark_variant": {
+          "value": 193
+        }
+      },
+      "ranchu_194": {
+        "minecraft:mark_variant": {
+          "value": 194
+        }
+      },
+      "ranchu_195": {
+        "minecraft:mark_variant": {
+          "value": 195
+        }
+      },
+      "ranchu_196": {
+        "minecraft:mark_variant": {
+          "value": 196
+        }
+      },
+      "ranchu_197": {
+        "minecraft:mark_variant": {
+          "value": 197
+        }
+      },
+      "ranchu_198": {
+        "minecraft:mark_variant": {
+          "value": 198
+        }
+      },
+      "ranchu_199": {
+        "minecraft:mark_variant": {
+          "value": 199
+        }
+      },
+      "ranchu_200": {
+        "minecraft:mark_variant": {
+          "value": 200
+        }
+      },
+      "ranchu_201": {
+        "minecraft:mark_variant": {
+          "value": 201
+        }
+      },
+      "ranchu_202": {
+        "minecraft:mark_variant": {
+          "value": 202
+        }
+      },
+      "ranchu_203": {
+        "minecraft:mark_variant": {
+          "value": 203
+        }
+      },
+      "ranchu_204": {
+        "minecraft:mark_variant": {
+          "value": 204
+        }
+      },
+      "ranchu_205": {
+        "minecraft:mark_variant": {
+          "value": 205
+        }
+      },
+      "ranchu_206": {
+        "minecraft:mark_variant": {
+          "value": 206
+        }
+      },
+      "ranchu_207": {
+        "minecraft:mark_variant": {
+          "value": 207
+        }
+      },
+      "ranchu_208": {
+        "minecraft:mark_variant": {
+          "value": 208
+        }
+      },
+      "ranchu_209": {
+        "minecraft:mark_variant": {
+          "value": 209
+        }
+      },
+      "ranchu_210": {
+        "minecraft:mark_variant": {
+          "value": 210
+        }
+      },
+      "ranchu_211": {
+        "minecraft:mark_variant": {
+          "value": 211
+        }
+      },
+      "ranchu_212": {
+        "minecraft:mark_variant": {
+          "value": 212
+        }
+      },
+      "ranchu_213": {
+        "minecraft:mark_variant": {
+          "value": 213
+        }
+      },
+      "ranchu_214": {
+        "minecraft:mark_variant": {
+          "value": 214
+        }
+      },
+      "ranchu_215": {
+        "minecraft:mark_variant": {
+          "value": 215
+        }
+      },
+      "ranchu_216": {
+        "minecraft:mark_variant": {
+          "value": 216
+        }
+      },
+      "ranchu_217": {
+        "minecraft:mark_variant": {
+          "value": 217
+        }
+      },
+      "ranchu_218": {
+        "minecraft:mark_variant": {
+          "value": 218
+        }
+      },
+      "ranchu_219": {
+        "minecraft:mark_variant": {
+          "value": 219
+        }
+      },
+      "ranchu_220": {
+        "minecraft:mark_variant": {
+          "value": 220
+        }
+      },
+      "ranchu_221": {
+        "minecraft:mark_variant": {
+          "value": 221
+        }
+      },
+      "ranchu_222": {
+        "minecraft:mark_variant": {
+          "value": 222
+        }
+      },
+      "ranchu_223": {
+        "minecraft:mark_variant": {
+          "value": 223
+        }
+      },
+      "ranchu_224": {
+        "minecraft:mark_variant": {
+          "value": 224
+        }
+      },
+      "ranchu_225": {
+        "minecraft:mark_variant": {
+          "value": 225
+        }
+      },
+      "ranchu_226": {
+        "minecraft:mark_variant": {
+          "value": 226
+        }
+      },
+      "ranchu_227": {
+        "minecraft:mark_variant": {
+          "value": 227
+        }
+      },
+      "ranchu_228": {
+        "minecraft:mark_variant": {
+          "value": 228
+        }
+      },
+      "ranchu_229": {
+        "minecraft:mark_variant": {
+          "value": 229
+        }
+      },
+      "ranchu_230": {
+        "minecraft:mark_variant": {
+          "value": 230
+        }
+      },
+      "ranchu_231": {
+        "minecraft:mark_variant": {
+          "value": 231
+        }
+      },
+      "ranchu_232": {
+        "minecraft:mark_variant": {
+          "value": 232
+        }
+      },
+      "ranchu_233": {
+        "minecraft:mark_variant": {
+          "value": 233
+        }
+      },
+      "ranchu_234": {
+        "minecraft:mark_variant": {
+          "value": 234
+        }
+      },
+      "ranchu_235": {
+        "minecraft:mark_variant": {
+          "value": 235
+        }
+      },
+      "ranchu_236": {
+        "minecraft:mark_variant": {
+          "value": 236
+        }
+      },
+      "ranchu_237": {
+        "minecraft:mark_variant": {
+          "value": 237
+        }
+      },
+      "ranchu_238": {
+        "minecraft:mark_variant": {
+          "value": 238
+        }
+      },
+      "ranchu_239": {
+        "minecraft:mark_variant": {
+          "value": 239
+        }
+      },
+      "ranchu_240": {
+        "minecraft:mark_variant": {
+          "value": 240
+        }
+      },
+      "ranchu_241": {
+        "minecraft:mark_variant": {
+          "value": 241
+        }
+      },
+      "ranchu_242": {
+        "minecraft:mark_variant": {
+          "value": 242
+        }
+      },
+      "ranchu_243": {
+        "minecraft:mark_variant": {
+          "value": 243
+        }
+      },
+      "ranchu_244": {
+        "minecraft:mark_variant": {
+          "value": 244
+        }
+      },
+      "ranchu_245": {
+        "minecraft:mark_variant": {
+          "value": 245
+        }
+      },
+      "ranchu_246": {
+        "minecraft:mark_variant": {
+          "value": 246
+        }
+      },
+      "ranchu_247": {
+        "minecraft:mark_variant": {
+          "value": 247
+        }
+      },
+      "ranchu_248": {
+        "minecraft:mark_variant": {
+          "value": 248
+        }
+      },
+      "ranchu_249": {
+        "minecraft:mark_variant": {
+          "value": 249
+        }
+      },
+      "ranchu_250": {
+        "minecraft:mark_variant": {
+          "value": 250
+        }
+      },
+      "ranchu_251": {
+        "minecraft:mark_variant": {
+          "value": 251
+        }
+      },
+      "ranchu_252": {
+        "minecraft:mark_variant": {
+          "value": 252
+        }
+      },
+      "ranchu_253": {
+        "minecraft:mark_variant": {
+          "value": 253
+        }
+      },
+      "ranchu_254": {
+        "minecraft:mark_variant": {
+          "value": 254
+        }
+      },
+      "ranchu_255": {
+        "minecraft:mark_variant": {
+          "value": 255
+        }
+      },
+      "ranchu_256": {
+        "minecraft:mark_variant": {
+          "value": 256
+        }
+      },
+      "ranchu_257": {
+        "minecraft:mark_variant": {
+          "value": 257
+        }
+      },
+      "ranchu_258": {
+        "minecraft:mark_variant": {
+          "value": 258
+        }
+      },
+      "ranchu_259": {
+        "minecraft:mark_variant": {
+          "value": 259
+        }
+      },
+      "ranchu_260": {
+        "minecraft:mark_variant": {
+          "value": 260
+        }
+      },
+      "ranchu_261": {
+        "minecraft:mark_variant": {
+          "value": 261
+        }
+      },
+      "ranchu_262": {
+        "minecraft:mark_variant": {
+          "value": 262
+        }
+      },
+      "ranchu_263": {
+        "minecraft:mark_variant": {
+          "value": 263
+        }
+      },
+      "ranchu_264": {
+        "minecraft:mark_variant": {
+          "value": 264
+        }
+      },
+      "ranchu_265": {
+        "minecraft:mark_variant": {
+          "value": 265
+        }
+      },
+      "ranchu_266": {
+        "minecraft:mark_variant": {
+          "value": 266
+        }
+      },
+      "ranchu_267": {
+        "minecraft:mark_variant": {
+          "value": 267
+        }
+      },
+      "ranchu_268": {
+        "minecraft:mark_variant": {
+          "value": 268
+        }
+      },
+      "ranchu_269": {
+        "minecraft:mark_variant": {
+          "value": 269
+        }
+      },
+      "ranchu_270": {
+        "minecraft:mark_variant": {
+          "value": 270
+        }
+      },
+      "ranchu_271": {
+        "minecraft:mark_variant": {
+          "value": 271
+        }
+      },
+      "ranchu_272": {
+        "minecraft:mark_variant": {
+          "value": 272
+        }
+      },
+      "ranchu_273": {
+        "minecraft:mark_variant": {
+          "value": 273
+        }
+      },
+      "ranchu_274": {
+        "minecraft:mark_variant": {
+          "value": 274
+        }
+      },
+      "ranchu_275": {
+        "minecraft:mark_variant": {
+          "value": 275
+        }
+      },
+      "ranchu_276": {
+        "minecraft:mark_variant": {
+          "value": 276
+        }
+      },
+      "ranchu_277": {
+        "minecraft:mark_variant": {
+          "value": 277
+        }
+      },
+      "ranchu_278": {
+        "minecraft:mark_variant": {
+          "value": 278
+        }
+      },
+      "ranchu_279": {
+        "minecraft:mark_variant": {
+          "value": 279
+        }
+      },
+      "ranchu_280": {
+        "minecraft:mark_variant": {
+          "value": 280
+        }
+      },
+      "ranchu_281": {
+        "minecraft:mark_variant": {
+          "value": 281
+        }
+      },
+      "ranchu_282": {
+        "minecraft:mark_variant": {
+          "value": 282
+        }
+      },
+      "ranchu_283": {
+        "minecraft:mark_variant": {
+          "value": 283
+        }
+      },
+      "ranchu_284": {
+        "minecraft:mark_variant": {
+          "value": 284
+        }
+      },
+      "ranchu_285": {
+        "minecraft:mark_variant": {
+          "value": 285
+        }
+      },
+      "ranchu_286": {
+        "minecraft:mark_variant": {
+          "value": 286
+        }
+      },
+      "ranchu_287": {
+        "minecraft:mark_variant": {
+          "value": 287
+        }
+      },
+      "ranchu_288": {
+        "minecraft:mark_variant": {
+          "value": 288
+        }
+      },
+      "ranchu_289": {
+        "minecraft:mark_variant": {
+          "value": 289
+        }
+      },
+      "ranchu_290": {
+        "minecraft:mark_variant": {
+          "value": 290
+        }
+      },
+      "ranchu_291": {
+        "minecraft:mark_variant": {
+          "value": 291
+        }
+      },
+      "ranchu_292": {
+        "minecraft:mark_variant": {
+          "value": 292
+        }
+      },
+      "ranchu_293": {
+        "minecraft:mark_variant": {
+          "value": 293
+        }
+      },
+      "ranchu_294": {
+        "minecraft:mark_variant": {
+          "value": 294
+        }
+      },
+      "ranchu_295": {
+        "minecraft:mark_variant": {
+          "value": 295
+        }
+      },
+      "ranchu_296": {
+        "minecraft:mark_variant": {
+          "value": 296
+        }
+      },
+      "ranchu_297": {
+        "minecraft:mark_variant": {
+          "value": 297
+        }
+      },
+      "ranchu_298": {
+        "minecraft:mark_variant": {
+          "value": 298
+        }
+      },
+      "ranchu_299": {
+        "minecraft:mark_variant": {
+          "value": 299
+        }
+      },
+      "ranchu_300": {
+        "minecraft:mark_variant": {
+          "value": 300
+        }
+      },
+      "ranchu_301": {
+        "minecraft:mark_variant": {
+          "value": 301
+        }
+      },
+      "ranchu_302": {
+        "minecraft:mark_variant": {
+          "value": 302
+        }
+      },
+      "ranchu_303": {
+        "minecraft:mark_variant": {
+          "value": 303
+        }
+      }
+    },
+    "events": {
+      "babyfat:can_breed_time": {
+        "add": {
+          "component_groups": [
+            "can_breed_next"
+          ]
+        }
+      },
+      "babyfat:can_not_breed_time": {
+        "remove": {
+          "component_groups": [
+            "can_breed_next",
+            "can_breed_now"
+          ]
+        }
+      },
+      "babyfat:can_breed_now": {
+        "add": {
+          "component_groups": [
+            "can_breed_now"
+          ]
+        }
+      },
+      "babyfat:can_not_breed_now": {
+        "remove": {
+          "component_groups": [
+            "can_breed_now"
+          ]
+        }
+      },
+      "minecraft:entity_born": {
+        "add": {
+          "component_groups": [
+            "ranchu_baby"
+          ]
+        }
+      },
+      "babyfat:ageable_grow_up": {
+        "add": {
+          "component_groups": [
+            "ranchu_adult"
+          ]
+        },
+        "remove": {
+          "component_groups": [
+            "ranchu_baby"
+          ]
+        }
+      },
+      "minecraft:entity_spawned": {
+        "sequence": [
+          {
+            "randomize": [
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_adult"
+                  ]
+                },
+                "weight": 95
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_baby"
+                  ]
+                },
+                "weight": 5
+              }
+            ]
+          },
+          {
+            "randomize": [
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_1"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_2"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_3"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_4"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_5"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_6"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_7"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_8"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_9"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_10"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_11"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_12"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_13"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_14"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_15"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_16"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_17"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_18"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_19"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_20"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_21"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_22"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_23"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_24"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_25"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_26"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_27"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_28"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_29"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_30"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_31"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_32"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_33"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_34"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_35"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_36"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_37"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_38"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_39"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_40"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_41"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_42"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_43"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_44"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_45"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_46"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_47"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_48"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_49"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_50"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_51"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_52"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_53"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_54"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_55"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_56"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_57"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_58"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_59"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_60"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_61"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_62"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_63"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_64"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_65"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_66"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_67"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_68"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_69"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_70"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_71"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_72"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_73"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_74"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_75"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_76"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_77"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_78"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_79"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_80"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_81"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_82"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_83"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_84"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_85"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_86"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_87"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_88"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_89"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_90"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_91"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_92"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_93"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_94"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_95"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_96"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_97"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_98"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_99"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_100"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_101"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_102"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_103"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_104"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_105"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_106"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_107"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_108"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_109"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_110"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_111"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_112"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_113"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_114"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_115"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_116"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_117"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_118"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_119"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_120"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_121"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_122"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_123"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_124"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_125"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_126"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_127"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_128"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_129"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_130"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_131"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_132"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_133"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_134"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_135"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_136"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_137"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_138"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_139"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_140"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_141"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_142"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_143"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_144"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_145"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_146"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_147"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_148"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_149"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_150"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_151"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_152"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_153"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_154"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_155"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_156"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_157"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_158"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_159"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_160"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_161"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_162"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_163"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_164"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_165"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_166"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_167"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_168"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_169"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_170"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_171"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_172"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_173"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_174"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_175"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_176"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_177"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_178"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_179"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_180"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_181"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_182"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_183"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_184"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_185"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_186"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_187"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_188"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_189"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_190"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_191"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_192"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_193"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_194"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_195"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_196"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_197"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_198"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_199"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_200"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_201"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_202"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_203"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_204"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_205"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_206"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_207"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_208"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_209"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_210"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_211"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_212"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_213"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_214"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_215"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_216"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_217"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_218"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_219"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_220"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_221"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_222"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_223"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_224"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_225"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_226"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_227"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_228"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_229"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_230"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_231"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_232"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_233"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_234"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_235"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_236"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_237"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_238"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_239"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_240"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_241"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_242"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_243"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_244"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_245"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_246"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_247"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_248"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_249"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_250"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_251"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_252"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_253"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_254"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_255"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_256"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_257"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_258"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_259"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_260"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_261"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_262"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_263"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_264"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_265"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_266"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_267"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_268"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_269"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_270"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_271"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_272"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_273"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_274"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_275"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_276"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_277"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_278"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_279"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_280"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_281"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_282"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_283"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_284"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_285"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_286"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_287"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_288"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_289"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_290"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_291"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_292"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_293"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_294"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_295"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_296"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_297"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_298"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_299"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_300"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_301"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_302"
+                  ]
+                },
+                "weight": 1
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "ranchu_303"
+                  ]
+                },
+                "weight": 1
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

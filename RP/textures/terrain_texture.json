@@ -1,0 +1,14 @@
+{
+  "texture_data": {
+    "babyfat:water_lettuce_particles": {
+      "textures": [
+        {
+          "path": "textures/blocks/water_lettuce_particles"
+        }
+      ]
+    },
+    "water_lettuce": {
+      "textures": "textures/blocks/water_lettuce"
+    }
+  }
+}

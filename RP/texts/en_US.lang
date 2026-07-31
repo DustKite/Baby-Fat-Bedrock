@@ -1,0 +1,7 @@
+pack.name=Baby Fat
+pack.description=For 1.26.0+, This addon is ported based on the original Java Edition mod Baby Fat and this work is licensed under the LGPLv3 License.
+
+item.babyfat:water_lettuce=Water Lettuce
+
+item.spawn_egg.entity.babyfat:ranchu.name=Ranchu Spawn Egg
+entity.babyfat:ranchu.name=Ranchu

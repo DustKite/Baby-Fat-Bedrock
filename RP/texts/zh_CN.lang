@@ -1,0 +1,7 @@
+pack.name=婴儿肥
+pack.description=适配1.26.0+，本模组根据原Java版模组Baby Fat在遵循LGPLv3协议的情况下进行移植.
+
+item.babyfat:water_lettuce=水生莴苣
+
+item.spawn_egg.entity.babyfat:ranchu.name=兰寿金鱼刷怪蛋
+entity.babyfat:ranchu.name=兰寿金鱼

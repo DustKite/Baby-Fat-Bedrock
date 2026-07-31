@@ -1,0 +1,22 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:item": {
+        "components": {
+            "minecraft:block_placer": {
+                "block": "babyfat:water_lettuce",
+                "replace_block_item": true
+            },
+            "minecraft:icon": {
+                "textures": {
+                    "default": "water_lettuce"
+                }
+            }
+        },
+        "description": {
+            "identifier": "babyfat:water_lettuce",
+            "menu_category": {
+                "category": "nature"
+            }
+        }
+    }
+}

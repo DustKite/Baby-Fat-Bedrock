@@ -1,0 +1,62 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "pack.name",
+    "description": "pack.description",
+    "uuid": "1d798c87-f3d7-41f5-bdf7-9ba41ef7593e",
+    "version": [
+      3,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      26,
+      0
+    ]
+  },
+  "modules": [
+    {
+      "type": "data",
+      "uuid": "f1c151fc-ecbe-40b5-892c-17b165b03b04",
+      "version": [
+        3,
+        0,
+        0
+      ]
+    },
+    {
+      "description": "Baby Fat Scripts",
+      "type": "script",
+      "language": "javascript",
+      "uuid": "c8fc3257-a7c8-41a6-8712-314b4b8592ff",
+      "version": [
+        3,
+        0,
+        0
+      ],
+      "entry": "scripts/main.js"
+    }
+  ],
+  "metadata": {
+    "authors": [
+      "Dust_Kite/Elaikes"
+    ],
+    "license": "LGPLv3",
+    "product_type": "addon"
+  },
+  "dependencies": [
+    {
+      "uuid": "73c81d26-9ed2-4f03-8cb6-555b4aaf5e3d",
+      "version": [
+        3,
+        0,
+        0
+      ]
+    },
+    {
+      "module_name": "@minecraft/server",
+      "version": "2.0.0"
+    }
+  ]
+}
